@@ -1,11 +1,11 @@
 @extends('layout')
-@section('content')
 
+@section('content')
 <h1>{{ $title }}</h1>
 
 @if (count($items) > 0)
-    <table class="table table-sm table-hover table-striped">
-        <thead class="thead-light">
+    <table class="table table-hover">
+        <thead>
             <tr>
                 <th>ID</th>
                 <th>Name</th>
@@ -13,8 +13,7 @@
                 <th>Genre</th>
                 <th>Year</th>
                 <th>Price</th>
-                <th>Published</th>
-                <th>&nbsp;</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -23,26 +22,14 @@
                     <td>{{ $book->id }}</td>
                     <td>{{ $book->name }}</td>
                     <td>{{ $book->author->name }}</td>
-                    <td>{{ $book->genre->name ?? 'N/A' }}</td>
+                    <td>{{ $book->genre->name }}</td>
                     <td>{{ $book->year }}</td>
-                    <td>&euro; {{ number_format($book->price, 2, '.') }}</td>
-                    <td>{!! $book->display ? '&#x2714;' : '&#x274C;' !!}</td>
+                    <td>{{ $book->price }}</td>
                     <td>
-                        <a
-                            href="/books/update/{{ $book->id }}"
-                            class="btn btn-outline-primary btn-sm"
-                        >Edit</a> /
-
-                        <form
-                            method="post"
-                            action="/books/delete/{{ $book->id }}"
-                            class="d-inline deletion-form"
-                        >
+                        <a href="/books/edit/{{ $book->id }}" class="btn btn-primary btn-sm">Edit</a>
+                        <form action="/books/{{ $book->id }}/delete" method="POST" class="d-inline">
                             @csrf
-                            <button
-                                type="submit"
-                                class="btn btn-outline-danger btn-sm"
-                            >Delete</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                         </form>
                     </td>
                 </tr>
@@ -50,12 +37,7 @@
         </tbody>
     </table>
 @else
-    <p>No entries found in database </p>
+    <p>No books found.</p>
 @endif
-
-<a href="/books/create" class="btn btn-primary">Add new book</a>
-
+<a href="/books/create" class="btn btn-success">Add New Book</a>
 @endsection
-
-
-

@@ -1,4 +1,5 @@
 @extends('layout')
+
 @section('content')
     <h1>{{ $title }}</h1>
 
@@ -6,11 +7,14 @@
         <div class="alert alert-danger">Please fix the validation errors!</div>
     @endif
 
-    <form
-        method="post"
-        action="{{ $book->exists ? '/books/patch/' . $book->id : '/books/put' }}"
-        enctype="multipart/form-data">
+    <form method="post" 
+          action="{{ $book->exists ? '/books/patch/' . $book->id : '/books' }}" 
+          enctype="multipart/form-data">
         @csrf
+
+        @if($book->exists)
+            @method('PATCH') <!-- This ensures that the form is treated as a PATCH request for updating -->
+        @endif
 
         <div class="mb-3">
             <label for="book-name" class="form-label">Name</label>

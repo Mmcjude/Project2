@@ -1,10 +1,8 @@
-<?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateBooksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +11,17 @@ return new class extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('author_id')->constrained('authors')->onDelete('cascade'); // Foreign key to authors table
-            $table->string('name', 256); // Name of the book
-            $table->text('description')->nullable(); // Description of the book
-            $table->decimal('price', 8, 2)->nullable(); // Price of the book
-            $table->integer('year'); // Year of publication
-            $table->string('image', 256)->nullable(); // Image path of the book
-            $table->boolean('display'); // Whether the book is displayed
-            $table->timestamps(); // created_at and updated_at timestamps
+            // Define foreign key to the authors table
+            $table->foreignId('author_id')->constrained()->onDelete('cascade');  
+            // Define foreign key to the genres table
+            $table->foreignId('genre_id')->constrained()->onDelete('set null');  
+            $table->string('name', 256);
+            $table->text('description')->nullable();
+            $table->decimal('price', 8, 2)->nullable();
+            $table->integer('year');
+            $table->string('image', 256)->nullable();
+            $table->boolean('display')->default(false);
+            $table->timestamps();
         });
     }
 
@@ -31,4 +32,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('books');
     }
-};
+}

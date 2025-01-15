@@ -9,13 +9,14 @@ use Illuminate\Http\RedirectResponse;
 
 class GenreController extends Controller
 {
-    // Display a list of all genres
+    // Display all genres
     public function list(): View
     {
         $genres = Genre::orderBy('name', 'asc')->get();
+
         return view('genre.list', [
             'title' => 'Genres',
-            'genres' => $genres,
+            'items' => $genres,
         ]);
     }
 
@@ -28,20 +29,18 @@ class GenreController extends Controller
         ]);
     }
 
-    // Save a new genre
-    public function put(Request $request): RedirectResponse
+    // Store a new genre (POST)
+    public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:genres,name',
-        ]);
+        $validated = $this->validateGenreData($request);
 
         Genre::create($validated);
 
         return redirect('/genres')->with('success', 'Genre created successfully!');
     }
 
-    // Show form to edit an existing genre
-    public function edit(Genre $genre): View
+    // Show form to update a genre
+    public function update(Genre $genre): View
     {
         return view('genre.form', [
             'title' => 'Edit Genre',
@@ -49,12 +48,10 @@ class GenreController extends Controller
         ]);
     }
 
-    // Update an existing genre
+    // Apply changes to the genre (PATCH)
     public function patch(Request $request, Genre $genre): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:genres,name,' . $genre->id,
-        ]);
+        $validated = $this->validateGenreData($request);
 
         $genre->update($validated);
 
@@ -67,5 +64,13 @@ class GenreController extends Controller
         $genre->delete();
 
         return redirect('/genres')->with('success', 'Genre deleted successfully!');
+    }
+
+    // Private method for validation rules
+    private function validateGenreData(Request $request): array
+    {
+        return $request->validate([
+            'name' => 'required|string|max:255|unique:genres,name,' . ($request->route('genre') ? $request->route('genre')->id : ''),
+        ]);
     }
 }

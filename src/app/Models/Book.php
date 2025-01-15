@@ -3,31 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Book extends Model
 {
-    use HasFactory;
-
-    // Define the fillable fields for mass assignment
+    // Mass-assignable attributes
     protected $fillable = [
-        'name',
-        'author_id',
-        'description',
-        'price',
-        'year',
-        'genre_id',
+        'name', 'author_id', 'genre_id', 'description', 'year', 'price', 'image', 'display',
     ];
 
-    // Define the relationship to the Author model
-    public function author(): BelongsTo
+    // Relationships
+    public function author()
     {
         return $this->belongsTo(Author::class);
     }
 
-    // Define the relationship to the Genre model
-    public function genre(): BelongsTo
+    public function genre()
     {
         return $this->belongsTo(Genre::class);
     }

@@ -23,18 +23,45 @@ Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/auth', [AuthController::class, 'authenticate']);
 Route::get('/logout', [AuthController::class, 'logout']);
 
-// Book routes
-Route::get('/books', [BookController::class, 'list']);
-Route::get('/books/create', [BookController::class, 'create']);
-Route::post('/books/put', [BookController::class, 'put']);
-Route::get('/books/edit/{book}', [BookController::class, 'edit']); // Added edit route
-Route::patch('/books/patch/{book}', [BookController::class, 'update']); // Changed to patch
-Route::delete('/books/delete/{book}', [BookController::class, 'delete']); // Changed to delete
 
-// Genre routes
+// Routes for managing books
+
+// Display all books
+Route::get('/books', [BookController::class, 'list']);
+
+// Show form to create a new book
+Route::get('/books/create', [BookController::class, 'create']);
+
+// Store a new book (POST)
+Route::post('/books', [BookController::class, 'store']); // Changed from '/books/put'
+
+// Show form to update an existing book
+Route::get('/books/update/{book}', [BookController::class, 'update']);
+
+// Apply changes to a book (PATCH)
+Route::post('/books/patch/{book}', [BookController::class, 'patch']);
+
+// Delete a book
+Route::post('/books/delete/{book}', [BookController::class, 'delete']);
+
+
+
+// Routes for managing genres
+
+// Display all genres
 Route::get('/genres', [GenreController::class, 'list']);
+
+// Show form to create a new genre
 Route::get('/genres/create', [GenreController::class, 'create']);
-Route::post('/genres/put', [GenreController::class, 'put']);
-Route::get('/genres/edit/{genre}', [GenreController::class, 'edit']);
-Route::patch('/genres/patch/{genre}', [GenreController::class, 'patch']);
-Route::delete('/genres/delete/{genre}', [GenreController::class, 'delete']);
+
+// Store a new genre (POST)
+Route::post('/genres', [GenreController::class, 'store']); 
+
+// Show form to update an existing genre
+Route::get('/genres/edit/{genre}', [GenreController::class, 'update']);
+
+// Apply changes to a genre (PATCH)
+Route::post('/genres/patch/{genre}', [GenreController::class, 'patch']);
+
+// Delete a genre
+Route::post('/genres/delete/{genre}', [GenreController::class, 'delete']);
