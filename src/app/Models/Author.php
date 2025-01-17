@@ -12,7 +12,7 @@ class Author extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'bio']; // Add 'name' and 'bio' for mass assignment
+    protected $fillable = ['name', 'bio'];
 
     /**
      * Get the books associated with the author.

@@ -18,6 +18,7 @@ services:
             - SERVER_NAME=localhost
             - DOCUMENT_ROOT=/var/www/src/public
 
+
     # php
     # https://hub.docker.com/_/php
     php:
@@ -27,7 +28,8 @@ services:
             - './src:/var/www/src'
         working_dir: /var/www/src
         ports:
-            - 9000:9000
+            - 9000:9000 
+            - 5173:5173
         environment:
             - TZ=UTC
             - APP_ROOT=/var/www/src

@@ -26,9 +26,13 @@
                     <td>{{ $book->year }}</td>
                     <td>{{ $book->price }}</td>
                     <td>
-                        <a href="/books/edit/{{ $book->id }}" class="btn btn-primary btn-sm">Edit</a>
-                        <form action="/books/{{ $book->id }}/delete" method="POST" class="d-inline">
+                        @if ($book->image)
+                            <img src="{{ asset('images/' . $book->image) }}" class="img-thumbnail" width="50">
+                        @endif
+                        <a href="/books/update/{{ $book->id }}" class="btn btn-primary btn-sm">Edit</a>
+                        <form action="/books/delete/{{ $book->id }}" method="POST" class="d-inline">
                             @csrf
+                            @method('DELETE') <!-- DELETE method for the route -->
                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                         </form>
                     </td>

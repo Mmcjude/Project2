@@ -32,9 +32,8 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app/private'),
-            'serve' => true,
-            'throw' => false,
+            'root' => storage_path('app'),
+            'visibility' => 'private',
         ],
 
         'public' => [
@@ -42,7 +41,13 @@ return [
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
-            'throw' => false,
+        ],
+
+        'uploads' => [
+            'driver' => 'local',
+            'root' => public_path('images'), // This will point to the public/images directory
+            'url' => env('APP_URL') . '/images', // The URL used to access the uploaded images
+            'visibility' => 'public',
         ],
 
         's3' => [
@@ -54,7 +59,6 @@ return [
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
-            'throw' => false,
         ],
 
     ],
