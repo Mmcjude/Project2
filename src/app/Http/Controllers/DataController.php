@@ -3,16 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
-use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class DataController extends Controller
 {
     /**
-     * Return 3 published books in random order and display them.
+     * Return 3 published books in random order.
      *
-     * @return View
+     * @return JsonResponse
      */
-    public function getTopBooks(): View
+    public function getTopBooks(): JsonResponse
     {
         $books = Book::with(['author', 'genre']) // Eager load the author and genre relationships
             ->where('display', true)
@@ -20,16 +20,16 @@ class DataController extends Controller
             ->take(3)
             ->get();
 
-        return view('public', ['books' => $books]);
+        return response()->json($books);
     }
 
     /**
      * Return the selected book if it's published.
      *
      * @param Book $book
-     * @return View
+     * @return JsonResponse
      */
-    public function getBook(Book $book): View
+    public function getBook(Book $book): JsonResponse
     {
         $selectedBook = Book::with(['author', 'genre']) // Eager load the author and genre relationships
             ->where([
@@ -38,16 +38,16 @@ class DataController extends Controller
             ])
             ->firstOrFail();
 
-        return view('book-detail', ['book' => $selectedBook]);
+        return response()->json($selectedBook);
     }
 
     /**
-     * Return 3 related published books, excluding the selected book.
+     * Return 3 published books in random order, excluding the selected book.
      *
      * @param Book $book
-     * @return View
+     * @return JsonResponse
      */
-    public function getRelatedBooks(Book $book): View
+    public function getRelatedBooks(Book $book): JsonResponse
     {
         $books = Book::with(['author', 'genre']) // Eager load the author and genre relationships
             ->where('display', true)
@@ -56,6 +56,6 @@ class DataController extends Controller
             ->take(3)
             ->get();
 
-        return view('related-books', ['books' => $books]);
+        return response()->json($books);
     }
 }

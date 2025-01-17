@@ -11,7 +11,9 @@ use App\Http\Controllers\DataController;
 // -----------------------
 // Home Route
 // -----------------------
+
 Route::get('/', [HomeController::class, 'index']);
+
 
 
 // -----------------------
@@ -60,8 +62,5 @@ Route::get('/data/get-book/{book}', [DataController::class, 'getBook']);
 Route::get('/data/get-related-books/{book}', [DataController::class, 'getRelatedBooks']);
 
 
-Route::get('/', function () {
-    return view('public', ['title' => 'Home']);
-})->name('home'); // Home page
 
 
