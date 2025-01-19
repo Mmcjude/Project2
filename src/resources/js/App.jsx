@@ -1,12 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import 'animate.css'; // Animation library for smooth transitions
+import '../css/loader.css';  // Adjust the path to go up to the 'resources' folder
 
-// Header component with animations
+
+// Loader component to display during data loading
+const Loader = () => {
+    return (
+        <div className="loader-container">
+            <div className="loader"></div>
+        </div>
+    );
+};
+
+// Header component with animations and cat logo
 const Header = () => {
     return (
         <header className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-8 text-center shadow-xl animate__animated animate__fadeIn">
-            <h1 className="text-4xl font-bold">Welcome to Riley's Bookstore</h1>
-            <p className="mt-2 text-xl font-light">Discover books that you'll love</p>
+            <img
+                src="/images/cat.png"
+                alt="Cat Logo"
+                className="w-20 h-20 mx-auto mb-4 rounded-full shadow-lg"
+            />
+            <h1 className="text-4xl font-bold">Welcome to Lexy's Bookstore</h1>
+            <p className="mt-2 text-xl font-light">Discover books that you'll love - Communication & Comprehension</p>
         </header>
     );
 };
@@ -15,7 +30,7 @@ const Header = () => {
 const Footer = () => {
     return (
         <footer className="bg-neutral-800 text-white py-6 text-center mt-12 shadow-lg">
-            <p>© 2025 Riley's Bookstore. All rights reserved.</p>
+            <p>© 2025 Lexy's Bookstore. All rights reserved.</p>
         </footer>
     );
 };
@@ -117,12 +132,20 @@ const RelatedBookView = ({ book, handleBookSelection }) => {
 // Display related books section
 const RelatedBookSection = ({ selectedBookID, handleBookSelection }) => {
     const [relatedBooks, setRelatedBooks] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         fetch(`http://localhost/data/get-related-books/${selectedBookID}`)
             .then((response) => response.json())
-            .then((data) => setRelatedBooks(data));
+            .then((data) => {
+                setRelatedBooks(data);
+                setIsLoading(false);
+            });
     }, [selectedBookID]);
+
+    if (isLoading) {
+        return <Loader />;
+    }
 
     return (
         <div className="mt-8">
@@ -140,11 +163,15 @@ const RelatedBookSection = ({ selectedBookID, handleBookSelection }) => {
 export default function App() {
     const [topBooks, setTopBooks] = useState([]);
     const [selectedBookID, setSelectedBookID] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         fetch('http://localhost/data/get-top-books')
             .then((response) => response.json())
-            .then((data) => setTopBooks(data));
+            .then((data) => {
+                setTopBooks(data);
+                setIsLoading(false);
+            });
     }, []);
 
     const handleBookSelection = (bookID) => {
@@ -154,6 +181,10 @@ export default function App() {
     const handleGoingBack = () => {
         setSelectedBookID(null);
     };
+
+    if (isLoading) {
+        return <Loader />;
+    }
 
     return (
         <>
@@ -183,14 +214,20 @@ export default function App() {
 // BookPage component - Handles selected book display
 const BookPage = ({ selectedBookID, handleGoingBack }) => {
     const [selectedBook, setSelectedBook] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         fetch(`http://localhost/data/get-book/${selectedBookID}`)
             .then((response) => response.json())
-            .then((data) => setSelectedBook(data));
+            .then((data) => {
+                setSelectedBook(data);
+                setIsLoading(false);
+            });
     }, [selectedBookID]);
 
-    if (!selectedBook) return <div>Loading...</div>;
+    if (isLoading) {
+        return <Loader />;
+    }
 
     return (
         <div>

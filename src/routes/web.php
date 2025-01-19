@@ -54,6 +54,7 @@ Route::get('/genres/edit/{genre}', [GenreController::class, 'update']);
 Route::patch('/genres/patch/{genre}', [GenreController::class, 'patch']);
 Route::delete('/genres/delete/{genre}', [GenreController::class, 'delete']);
 
+
 // -----------------------
 // Data/API Routes
 // -----------------------
