@@ -1,38 +1,47 @@
 @extends('layout')
 
 @section('content')
+    <h1>{{ $title }}</h1>
 
-<h1>{{ $title }}</h1>
+    <!-- Success Flash Message -->
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
-@if ($items->count() > 0)
-    <table class="table table-striped table-hover table-sm">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($items as $author)
+    @if (count($items) > 0)
+        <table class="table table-hover">
+            <thead>
                 <tr>
-                    <td>{{ $author->id }}</td>
-                    <td>{{ $author->name }}</td>
-                    <td>
-                        <a href="/authors/update/{{ $author->id }}" class="btn btn-outline-primary btn-sm">Edit</a>
-                        <form action="/authors/delete/{{ $author->id }}" method="post" class="d-inline">
-                            @csrf
-                            <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
-                        </form>
-                    </td>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Actions</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
-@else
-    <p>No entries found in the database.</p>
-@endif
+            </thead>
+            <tbody>
+                @foreach($items as $author)
+                    <tr>
+                        <td>{{ $author->id }}</td>
+                        <td>{{ $author->name }}</td>
+                        <td>
+                            <!-- Edit Button -->
+                            <a href="/authors/update/{{ $author->id }}" class="btn btn-primary btn-sm">Edit</a>
 
-<a href="/authors/create" class="btn btn-primary">Add New</a>
+                            <!-- Delete Button with Confirmation -->
+                            <form action="/authors/delete/{{ $author->id }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this author?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @else
+        <p>No authors found.</p>
+    @endif
 
+    <a href="/authors/create" class="btn btn-success mt-3">Add New Author</a>
 @endsection

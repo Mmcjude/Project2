@@ -3,6 +3,12 @@
 @section('content')
 <h1>{{ $title }}</h1>
 
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
 @if (count($items) > 0)
     <table class="table table-hover">
         <thead>
@@ -30,9 +36,9 @@
                             <img src="{{ asset('images/' . $book->image) }}" class="img-thumbnail" width="50">
                         @endif
                         <a href="/books/update/{{ $book->id }}" class="btn btn-primary btn-sm">Edit</a>
-                        <form action="/books/delete/{{ $book->id }}" method="POST" class="d-inline">
+                        <form action="/books/delete/{{ $book->id }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this book?');">
                             @csrf
-                            @method('DELETE') <!-- DELETE method for the route -->
+                            @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                         </form>
                     </td>
@@ -43,5 +49,6 @@
 @else
     <p>No books found.</p>
 @endif
+
 <a href="/books/create" class="btn btn-success">Add New Book</a>
 @endsection

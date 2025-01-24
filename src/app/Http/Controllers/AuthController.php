@@ -3,50 +3,34 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 
 class AuthController extends Controller
 {
-    // Display the login form
-    public function login(): View
+    // Login method
+    public function login()
     {
-
-/* echo 'my_user_name : <input value="'
-    . \Illuminate\Support\Facades\Hash::make('password')
-    . '">';
-    exit(); */
-
-        return view('auth.login', [
-            'title' => 'Login',
-        ]);
+        return view('auth.login', ['title' => 'Log in']);
     }
 
-    // Authenticate user
-    public function authenticate(Request $request): RedirectResponse
+    // Authenticate method
+    public function authenticate(Request $request)
     {
         $credentials = $request->only('name', 'password');
-
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-
             return redirect('/authors');
         }
-
-        return back()->withErrors([
-            'name' => 'Failed to authenticate',
-        ]);
+        return back()->withErrors(['name' => 'Failed to authenticate']);
     }
 
-    // end user session
-    public function logout(Request $request): RedirectResponse
+    // Logout method (GET method)
+    public function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
-        return redirect('/');
+        return redirect('/'); // Redirect to the home page or wherever you prefer
     }
 }
-

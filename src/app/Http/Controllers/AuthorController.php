@@ -10,47 +10,37 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 
 class AuthorController extends Controller implements HasMiddleware
 {
-    /**
-     * Middleware assigned to the controller.
-     */
     public static function middleware(): array
     {
         return ['auth'];
     }
 
-    // List all authors
     public function list(): View
     {
-        $items = Author::orderBy('name', 'asc')->get();
+        $authors = Author::orderBy('name', 'asc')->get();
 
         return view('author.list', [
             'title' => 'Authors',
-            'items' => $items,
+            'items' => $authors,
         ]);
     }
 
-    // Show create form
     public function create(): View
     {
         return view('author.form', [
-            'title' => 'Add new author',
-            'author' => new Author(), // Empty model for form binding
+            'title' => 'Add New Author',
+            'author' => new Author(),
         ]);
     }
 
-    // Store a new author
     public function put(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
-
+        $validated = $this->validateAuthorData($request);
         Author::create($validated);
 
         return redirect('/authors')->with('success', 'Author created successfully!');
     }
 
-    // Show edit form
     public function edit(Author $author): View
     {
         return view('author.form', [
@@ -59,23 +49,24 @@ class AuthorController extends Controller implements HasMiddleware
         ]);
     }
 
-    // Update existing author
-    public function patch(Author $author, Request $request): RedirectResponse
+    public function patch(Request $request, Author $author): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
-
+        $validated = $this->validateAuthorData($request);
         $author->update($validated);
 
         return redirect('/authors')->with('success', 'Author updated successfully!');
     }
 
-    // Delete an author
     public function delete(Author $author): RedirectResponse
     {
         $author->delete();
-
         return redirect('/authors')->with('success', 'Author deleted successfully!');
+    }
+
+    private function validateAuthorData(Request $request): array
+    {
+        return $request->validate([
+            'name' => 'required|string|max:255|unique:authors,name,' . ($request->route('author') ? $request->route('author')->id : ''),
+        ]);
     }
 }

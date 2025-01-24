@@ -5,13 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\Author;
 use App\Models\Genre;
-use App\Http\Requests\BookRequest; // Import the BookRequest
+use App\Http\Requests\BookRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class BookController extends Controller
+class BookController extends Controller implements HasMiddleware
 {
-    // Display all books
+    public static function middleware(): array
+    {
+        return ['auth'];
+    }
+
     public function list(): View
     {
         $items = Book::orderBy('name', 'asc')->get();
@@ -21,7 +26,6 @@ class BookController extends Controller
         ]);
     }
 
-    // Display new book form
     public function create(): View
     {
         $authors = Author::orderBy('name', 'asc')->get();
@@ -37,7 +41,6 @@ class BookController extends Controller
         );
     }
 
-    // Save book data (used by both store and update)
     private function saveBookData(Book $book, BookRequest $request)
     {
         $validatedData = $request->validated();
@@ -47,7 +50,6 @@ class BookController extends Controller
         $book->display = (bool) ($validatedData['display'] ?? false);
 
         if ($request->hasFile('image')) {
-            // Code to handle image upload and storage
             $uploadedFile = $request->file('image');
             $extension = $uploadedFile->clientExtension();
             $name = uniqid();
@@ -60,7 +62,6 @@ class BookController extends Controller
         $book->save();
     }
 
-    // Store a new book (POST)
     public function store(BookRequest $request): RedirectResponse
     {
         $book = new Book();
@@ -68,20 +69,17 @@ class BookController extends Controller
         return redirect('/books')->with('success', 'Book created successfully!');
     }
 
-    // Create a new book entry
     public function put(BookRequest $request): RedirectResponse
     {
-        return $this->store($request); // Store is called in put as well
+        return $this->store($request);
     }
 
-    // Update book data (PATCH)
     public function patch(Book $book, BookRequest $request): RedirectResponse
     {
         $this->saveBookData($book, $request);
         return redirect('/books')->with('success', 'Book updated successfully!');
     }
 
-    // Display book edit form
     public function update(Book $book): View
     {
         $authors = Author::orderBy('name', 'asc')->get();
@@ -97,7 +95,6 @@ class BookController extends Controller
         );
     }
 
-    // Delete a book
     public function delete(Book $book): RedirectResponse
     {
         if ($book->image && file_exists(storage_path('app/public/' . $book->image))) {
