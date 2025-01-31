@@ -33,6 +33,7 @@ class AuthorController extends Controller implements HasMiddleware
         ]);
     }
 
+    // Using PUT method for creating a new author
     public function put(Request $request): RedirectResponse
     {
         $validated = $this->validateAuthorData($request);
@@ -49,6 +50,7 @@ class AuthorController extends Controller implements HasMiddleware
         ]);
     }
 
+    
     public function patch(Request $request, Author $author): RedirectResponse
     {
         $validated = $this->validateAuthorData($request);

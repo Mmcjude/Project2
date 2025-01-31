@@ -29,9 +29,9 @@
                             <a href="/authors/update/{{ $author->id }}" class="btn btn-primary btn-sm">Edit</a>
 
                             <!-- Delete Button with Confirmation -->
-                            <form action="/authors/delete/{{ $author->id }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this author?');">
+                            <form action="/authors/{{ $author->id }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this author?');">
                                 @csrf
-                                @method('DELETE')
+                                @method('DELETE') <!-- Correct HTTP method -->
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                             </form>
                         </td>

@@ -168,7 +168,7 @@ export default function App() {
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
             <header className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-8 text-center shadow-xl">
-                <h1 className="text-4xl font-bold">Lexy's Bookstore</h1>
+                <h1 className="text-4xl font-bold"> Frida's Library</h1>
             </header>
             <main className="container mx-auto p-4">
                 <AnimatePresence>
@@ -191,7 +191,7 @@ export default function App() {
                 </AnimatePresence>
             </main>
             <footer className="bg-gray-800 text-white py-6 text-center">
-                <p>© 2025 Lexy's Bookstore. All rights reserved.</p>
+                <p>© 2025 Frida's Library. All rights reserved.</p>
             </footer>
         </motion.div>
     );

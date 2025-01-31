@@ -8,12 +8,12 @@
     @endif
 
     <form method="post" 
-          action="{{ $book->exists ? '/books/patch/' . $book->id : '/books' }}" 
+          action="{{ $book->exists ? '/books/' . $book->id : '/books' }}" 
           enctype="multipart/form-data">
         @csrf
 
         @if($book->exists)
-            @method('PATCH') <!-- This ensures that the form is treated as a PATCH request for updating -->
+            @method('PUT') <!-- This ensures the form is treated as PUT request for updating -->
         @endif
 
         <div class="mb-3">

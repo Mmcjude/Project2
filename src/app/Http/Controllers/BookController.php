@@ -44,7 +44,6 @@ class BookController extends Controller implements HasMiddleware
     private function saveBookData(Book $book, BookRequest $request)
     {
         $validatedData = $request->validated();
-
         $book->fill($validatedData);
         $book->genre_id = $validatedData['genre_id'];
         $book->display = (bool) ($validatedData['display'] ?? false);
@@ -59,6 +58,7 @@ class BookController extends Controller implements HasMiddleware
                 'uploads'
             );
         }
+
         $book->save();
     }
 
@@ -69,12 +69,13 @@ class BookController extends Controller implements HasMiddleware
         return redirect('/books')->with('success', 'Book created successfully!');
     }
 
-    public function put(BookRequest $request): RedirectResponse
+    public function put(BookRequest $request, Book $book): RedirectResponse
     {
-        return $this->store($request);
+        $this->saveBookData($book, $request);
+        return redirect('/books')->with('success', 'Book updated successfully!');
     }
 
-    public function patch(Book $book, BookRequest $request): RedirectResponse
+    public function patch(BookRequest $request, Book $book): RedirectResponse
     {
         $this->saveBookData($book, $request);
         return redirect('/books')->with('success', 'Book updated successfully!');

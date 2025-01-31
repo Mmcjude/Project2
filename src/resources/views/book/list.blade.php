@@ -36,7 +36,9 @@
                             <img src="{{ asset('images/' . $book->image) }}" class="img-thumbnail" width="50">
                         @endif
                         <a href="/books/update/{{ $book->id }}" class="btn btn-primary btn-sm">Edit</a>
-                        <form action="/books/delete/{{ $book->id }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this book?');">
+                        
+                        <!-- Delete Form -->
+                        <form action="/books/{{ $book->id }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this book?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
